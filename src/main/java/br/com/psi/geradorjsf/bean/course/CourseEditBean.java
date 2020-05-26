@@ -3,6 +3,7 @@ package br.com.psi.geradorjsf.bean.course;
 import br.com.psi.geradorjsf.annotation.ExceptionHandler;
 import br.com.psi.geradorjsf.persistence.dao.CourseDAO;
 import br.com.psi.geradorjsf.persistence.model.Course;
+import org.omnifaces.util.Messages;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -31,6 +32,14 @@ public class CourseEditBean implements Serializable {
     @ExceptionHandler
     public String update() {
         courseDAO.update(course);
+        Messages.create("The course {0} was successfully updated.", course.getName()).flash().add();
+        return "list.xhtml?faces-redirect=true";
+    }
+
+    @ExceptionHandler
+    public String delete() {
+        courseDAO.delete(course);
+        Messages.create("The course {0} was successfully deleted.", course.getName()).flash().add();
         return "list.xhtml?faces-redirect=true";
     }
 
