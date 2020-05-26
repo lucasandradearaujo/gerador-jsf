@@ -1,5 +1,6 @@
 package br.com.psi.geradorjsf.bean.question;
 
+import br.com.psi.geradorjsf.annotation.ExceptionHandler;
 import br.com.psi.geradorjsf.persistence.dao.CourseDAO;
 import br.com.psi.geradorjsf.persistence.dao.QuestionDAO;
 import br.com.psi.geradorjsf.persistence.model.Course;
@@ -30,6 +31,7 @@ public class QuestionListBean implements Serializable {
         this.courseDAO = courseDAO;
     }
 
+    @ExceptionHandler
     public void init() {
         course = courseDAO.findOne(courseId);
         search();
