@@ -2,10 +2,10 @@ package br.com.psi.geradorjsf.persistence.dao;
 
 import br.com.psi.geradorjsf.annotation.ExceptionHandler;
 import br.com.psi.geradorjsf.custom.CustomRestRemplate;
-import br.com.psi.geradorjsf.custom.CustomTypeReference;
 import br.com.psi.geradorjsf.persistence.model.Course;
 import br.com.psi.geradorjsf.util.ApiUtil;
 import br.com.psi.geradorjsf.util.JsonUtil;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponents;
@@ -26,10 +26,11 @@ public class CourseDAO implements Serializable {
     private final String CREATE_UPDATE_URL = ApiUtil.BASE_URL + "/professor/course/";
     private final CustomRestRemplate restRemplate;
     private final JsonUtil jsonUtil;
-    private final CustomTypeReference<List<Course>> listCourse;
+    private final ParameterizedTypeReference<List<Course>> courseListTypeReference = new ParameterizedTypeReference<List<Course>>() {
+    };
 
     @Inject
-    public CourseDAO(CustomRestRemplate restRemplate, JsonUtil jsonUtil, CustomTypeReference<List<Course>> listCourse) {
+    public CourseDAO(CustomRestRemplate restRemplate, JsonUtil jsonUtil) {
         this.restRemplate = restRemplate;
         this.jsonUtil = jsonUtil;
         this.listCourse = listCourse;
@@ -38,7 +39,7 @@ public class CourseDAO implements Serializable {
     @ExceptionHandler
     public List<Course> list(String name) {
         UriComponents url = UriComponentsBuilder.fromUriString(LIST_URL).queryParam("name", name).build();
-        ResponseEntity<List<Course>> exchange = restRemplate.exchange(url.toUriString(), GET, jsonUtil.tokenizedHttpEntityHeader(), listCourse.typeReference());
+        ResponseEntity<List<Course>> exchange = restRemplate.exchange(url.toUriString(), GET, jsonUtil.tokenizedHttpEntityHeader(), courseListTypeReference);
         return exchange.getBody();
     }
 

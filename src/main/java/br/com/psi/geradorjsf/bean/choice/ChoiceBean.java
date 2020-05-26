@@ -6,6 +6,7 @@ import br.com.psi.geradorjsf.persistence.dao.QuestionDAO;
 import br.com.psi.geradorjsf.persistence.model.Choice;
 import br.com.psi.geradorjsf.persistence.model.Question;
 import org.omnifaces.util.Messages;
+import org.primefaces.event.RowEditEvent;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -52,6 +53,21 @@ public class ChoiceBean implements Serializable {
 
     private void buildChoiceWithQuestion() {
         choice = Choice.Builder.newChoice().question(question).build();
+    }
+
+    @ExceptionHandler
+    public void onRowEditUpdateChoice(RowEditEvent event) {
+        Choice choice = (Choice) event.getObject();
+        choiceDAO.update(choice);
+        search();
+        Messages.addGlobalInfo("The choice {0} was successfully updated.", choice.getTitle());
+    }
+
+    @ExceptionHandler
+    public void delete(Choice choice) {
+        choiceDAO.delete(choice);
+        choiceList.remove(choice);
+        Messages.addGlobalInfo("The choice {0} was successfully deleted.", choice.getTitle());
     }
 
     public Choice getChoice() {
