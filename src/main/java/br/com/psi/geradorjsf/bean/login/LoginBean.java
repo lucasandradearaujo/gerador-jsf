@@ -1,6 +1,6 @@
 package br.com.psi.geradorjsf.bean.login;
 
-import br.com.psi.geradorjsf.custom.CustomURLEncoder;
+import br.com.psi.geradorjsf.custom.CustomURLEncoderDecoder;
 import br.com.psi.geradorjsf.persistence.dao.LoginDAO;
 import br.com.psi.geradorjsf.persistence.model.support.Token;
 
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+
 
 /**
  * @author Hiago
@@ -30,7 +30,7 @@ public class LoginBean implements Serializable {
     }
 
     public String login() throws UnsupportedEncodingException {
-        Token token = loginDAO.loginReturningToken("hiago", "1234567890");
+        Token token = loginDAO.loginReturningToken(username, password);
         if (token == null ) return null;
         addTokenAndExpirationTimeToCookies(token.getToken()), token.getExpirationTime().toString());
         return "index.xhtml?gaces-redirect=true";
@@ -42,7 +42,7 @@ public class LoginBean implements Serializable {
     }
 
     private void addTokenAndExpirationTimeToCookies(String token, String expirationTime) {
-        externalContext.addResponseCookie("token", CustomURLEncoder.encodeUTF8(token), null);
+        externalContext.addResponseCookie("token", CustomURLEncoderDecoder.encodeUTF8(token), null);
         externalContext.addResponseCookie("expirationTime", expirationTime, null);
     }
 

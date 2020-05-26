@@ -1,41 +1,45 @@
 package br.com.psi.geradorjsf.persistence.dao;
 
-import br.com.psi.geradorjsf.persistence.model.support.Token.;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import br.com.psi.geradorjsf.annotation.ExceptionHandler;
+import br.com.psi.geradorjsf.persistence.model.support.Token;
+import br.com.psi.geradorjsf.custom.CustomRestRemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
+
 
 import javax.inject.Inject;
 import java.io.Serializable;
 
-import static org.springframework.http.HttpMethod.POST;
 
+import static br.com.psi.geradorjsf.util.ApiUtil.LOGIN_URL;
+import static org.springframework.http.HttpMethod.POST;
 /**
  * @author Hiago
  */
 public class LoginDAO implements Serializable {
-    private final String BASE_URL = "http://localhost:8085/login";
-    private final RestTemplate restTemplate;
+    private final CustomRestRemplate restTemplate;
+    private final JsonUtil jsonUtil;
 
     @Inject
-    public LoginDAO(RestTemplate restTemplate) {
+    public LoginDAO(RestTemplate restTemplate, JsonUtil jsonUtil) {
         this.restTemplate = restTemplate;
+        this.jsonUtil = jsonUtil;
     }
 
-    public Token loginReturningToken(String username, String password){
-        String loginJson = "{\"username\":" + addQuotes(username) + ",\"password\":" + addQuotes(password) + "}";
-        ResponseEntity<Token> tokenExchange = restTemplate
-                .exchange(BASE_URL, POST, new HttpEntity<>(loginJson, createJsonHeader()), Token.class);
-        return tokenExchange.getBody();
-    }
+    @ExceptionHandler
+    public Token loginReturningToken(String username, String password) {
+        public Token loginReturningToken (String username, String password){
+            String loginJson = "{\"username\":" + addQuotes(username) + ",\"password\":" + addQuotes(password) + "}";
+            ResponseEntity<Token> tokenExchange = restTemplate.exchange(LOGIN_URL, POST, new HttpEntity<>(loginJson, jsonUtil.createJsonHeader()), Token.class);
+            return tokenExchange.getBody();
 
-    @SuppressWarnings("StringBufferReplaceableByString")
-    private String addQuotes(String value) {
-        return new StringBuilder(300).append("\"").append(value).append("\"").toString();
-    }
+        }
 
-    private HttpHeaders createJsonHeader(){
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return header;
+        @SuppressWarnings("StringBufferReplaceableByString")
+        private String addQuotes (String value){
+            return new StringBuilder(300).append("\"").append(value).append("\"").toString();
+        }
+
+
     }
 }

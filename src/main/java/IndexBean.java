@@ -1,4 +1,5 @@
 import br.com.psi.geradorjsf.persistence.dao.LoginDAO;
+import br.com.psi.geradorjsf.persistence.dao.ProfessorDAO;
 import br.com.psi.geradorjsf.persistence.model.support.Token;
 
 import javax.faces.view.ViewScoped;
@@ -14,15 +15,21 @@ import java.io.Serializable;
 public class IndexBean implements Serializable {
     private String message = "Projeto";
     private final LoginDAO loginDAO;
+    private final ProfessorDAO professorDAO;
 
     @Inject
-    public IndexBean(LoginDAO loginDAO) {
+    public IndexBean(LoginDAO loginDAO, ProfessorDAO professorDAO) {
         this.loginDAO = loginDAO;
+        this.professorDAO = professorDAO;
     }
 
-    public void login(){
+    public void login() {
         Token token = loginDAO.loginReturningToken("hiago", "1234567890");
         System.out.println(token);
+    }
+
+    public void checkProfessor(){
+        professorDAO.getProfessorById(1L);
     }
     public String getMessage() {
         return message;
