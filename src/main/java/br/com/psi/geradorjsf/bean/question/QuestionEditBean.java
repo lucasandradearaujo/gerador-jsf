@@ -1,9 +1,7 @@
 package br.com.psi.geradorjsf.bean.question;
 
 import br.com.psi.geradorjsf.annotation.ExceptionHandler;
-import br.com.psi.geradorjsf.persistence.dao.CourseDAO;
 import br.com.psi.geradorjsf.persistence.dao.QuestionDAO;
-import br.com.psi.geradorjsf.persistence.model.Course;
 import br.com.psi.geradorjsf.persistence.model.Question;
 import org.omnifaces.util.Messages;
 
@@ -42,7 +40,7 @@ public class QuestionEditBean implements Serializable {
     @ExceptionHandler
     public String delete() {
         questionDAO.delete(question);
-        Messages.create("The course {0} was successfully deleted.", question.getTitle()).flash().add();
+        Messages.create("The question {0} was successfully deleted.", question.getTitle()).flash().add();
         return "list.xhtml?faces-redirect=true&courseId=" + question.getCourse().getId();
     }
 
