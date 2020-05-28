@@ -19,7 +19,8 @@
                 <p:selectOneMenu id="questionDropDown"
                                  value="#{questionAssignmentBean.selectedQuestion}"
                                  required="true"
-                                 requiredMessage="Please select one question">
+                                 requiredMessage="Please select one question"
+                                 converter="entityConverter">
                     <f:selectItem value="#{null}" itemLabel="Select one question"/>
                     <f:selectItems value="#{questionAssignmentBean.availableQuestionList}"
                                    var="question" itemLabel="#{question.title}" itemValue="#{question}"/>
