@@ -1,11 +1,13 @@
 package br.com.psi.geradorjsf.bean.questionassignment;
 
+import br.com.psi.geradorjsf.annotation.ExceptionHandler;
 import br.com.psi.geradorjsf.persistence.dao.AssignmentDAO;
 import br.com.psi.geradorjsf.persistence.dao.QuestionAssignmentDAO;
 import br.com.psi.geradorjsf.persistence.model.Assignment;
 import br.com.psi.geradorjsf.persistence.model.Question;
 import br.com.psi.geradorjsf.persistence.model.QuestionAssignment;
 import org.omnifaces.util.Messages;
+import org.primefaces.event.RowEditEvent;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -45,9 +47,11 @@ public class QuestionAssignmentBean implements Serializable {
         questionAssignment = QuestionAssignment.Builder.newQuestionAssignment().assignment(assignment).build();
     }
 
+    @ExceptionHandler
     public void associateQuestion() {
         addQuestionAssignmentToQuestionAssignmentList(questionAssignmentDAO.associateQuestionToAssignment(questionAssignment));
         removeQuestionFromAvailableQuestionList(this.questionAssignment);
+        createNewQuestionAssignmentInstance();
     }
 
     private void addQuestionAssignmentToQuestionAssignmentList(QuestionAssignment questionAssignment) {
@@ -67,13 +71,21 @@ public class QuestionAssignmentBean implements Serializable {
         availableQuestionList.add(questionAssignment.getQuestion());
     }
 
-    public void delete(QuestionAssignment questionAssignment){
+    @ExceptionHandler
+    public void delete(QuestionAssignment questionAssignment) {
         questionAssignmentDAO.delete(questionAssignment);
         addQuestionToAvailableQuestionList(questionAssignment);
         removeQuestionAssignmentFromQuestionAssignmentList(questionAssignment);
         createNewQuestionAssignmentInstance();
         Messages.addGlobalInfo("The choice {0} was successfully deleted.", questionAssignment.getQuestion().getTitle());
 
+    }
+
+    @ExceptionHandler
+    public void onRowEditUpdateQuestionAssignment(RowEditEvent event) {
+        QuestionAssignment questionAssignment = (QuestionAssignment) event.getObject();
+        questionAssignmentDAO.update(questionAssignment);
+        Messages.addGlobalInfo("The question {0} was successfully updated.", questionAssignment.getQuestion().getTitle());
     }
 
     public QuestionAssignment getQuestionAssignment() {
