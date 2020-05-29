@@ -1,6 +1,6 @@
 package br.com.psi.geradorjsf.persistence.dao;
 
-import br.com.psi.geradorjsf.custom.CustomRestRemplate;
+import br.com.psi.geradorjsf.custom.CustomRestTemplate;
 import br.com.psi.geradorjsf.persistence.model.Question;
 import br.com.psi.geradorjsf.persistence.model.QuestionAssignment;
 import br.com.psi.geradorjsf.util.ApiUtil;
@@ -23,7 +23,7 @@ public class QuestionAssignmentDAO implements Serializable{
     private final String LIST_AVAILABLE_QUESTIONS_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/{courseId}/{assignmentId}";
     private final String CREATE_UPDATE_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/";
     private final String DELETE_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/{questionAssignmentId}";
-    private final CustomRestRemplate restRemplate;
+    private final CustomRestTemplate restRemplate;
     private final JsonUtil jsonUtil;
     private final ParameterizedTypeReference<List<QuestionAssignment>> questionAssignmentListTypeReference = new ParameterizedTypeReference<List<QuestionAssignment>>() {
     };
@@ -31,24 +31,24 @@ public class QuestionAssignmentDAO implements Serializable{
     };
 
     @Inject
-    public QuestionAssignmentDAO(CustomRestRemplate restRemplate, JsonUtil jsonUtil) {
-        this.restRemplate = restRemplate;
+    public QuestionAssignmentDAO(CustomRestTemplate restTemplate, JsonUtil jsonUtil) {
+        this.restTemplate = restTemplate;
         this.jsonUtil = jsonUtil;
     }
 
 
         public List<QuestionAssignment> listQuestionAssignment(long assignmentId) {
-            ResponseEntity<List<QuestionAssignment>> exchange = restRemplate.exchange(LIST_QUESTION_ASSIGNMENT_URL, GET, jsonUtil.tokenizedHttpEntityHeader(), questionAssignmentListTypeReference, assignmentId);
+            ResponseEntity<List<QuestionAssignment>> exchange = restTemplate.exchange(LIST_QUESTION_ASSIGNMENT_URL, GET, jsonUtil.tokenizedHttpEntityHeader(), questionAssignmentListTypeReference, assignmentId);
             return exchange.getBody();
         }
 
         public List<Question> listAvailableQuestions(long courseId, long assignmentId) {
-            ResponseEntity<List<Question>> exchange = restRemplate.exchange(LIST_AVAILABLE_QUESTIONS_URL, GET, jsonUtil.tokenizedHttpEntityHeader(), questionListTypeReference,courseId, assignmentId);
+            ResponseEntity<List<Question>> exchange = restTemplate.exchange(LIST_AVAILABLE_QUESTIONS_URL, GET, jsonUtil.tokenizedHttpEntityHeader(), questionListTypeReference,courseId, assignmentId);
         return exchange.getBody();
     }
 
     public void delete(QuestionAssignment questionAssignment) {
-        restRemplate.exchange(DELETE_URL, DELETE,
+        restTemplate.exchange(DELETE_URL, DELETE,
                 jsonUtil.tokenizedHttpEntityHeader(questionAssignment),
                 QuestionAssignment.class, questionAssignment.getId());
     }
@@ -62,6 +62,6 @@ public class QuestionAssignmentDAO implements Serializable{
     }
 
     private QuestionAssignment createOrUpdate(HttpMethod httpMethod, QuestionAssignment questionAssignment) {
-        return restRemplate.exchange(CREATE_UPDATE_URL, httpMethod, jsonUtil.tokenizedHttpEntityHeader(questionAssignment), QuestionAssignment.class).getBody();
+        return restTemplate.exchange(CREATE_UPDATE_URL, httpMethod, jsonUtil.tokenizedHttpEntityHeader(questionAssignment), QuestionAssignment.class).getBody();
     }
 }

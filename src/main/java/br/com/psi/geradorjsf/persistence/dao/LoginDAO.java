@@ -2,7 +2,7 @@ package br.com.psi.geradorjsf.persistence.dao;
 
 import br.com.psi.geradorjsf.annotation.ExceptionHandler;
 import br.com.psi.geradorjsf.persistence.model.support.Token;
-import br.com.psi.geradorjsf.custom.CustomRestRemplate;
+import br.com.psi.geradorjsf.custom.CustomRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -17,11 +17,11 @@ import static org.springframework.http.HttpMethod.POST;
  * @author Hiago
  */
 public class LoginDAO implements Serializable {
-    private final CustomRestRemplate restTemplate;
+    private final CustomRestTemplate restTemplate;
     private final JsonUtil jsonUtil;
 
     @Inject
-    public LoginDAO(RestTemplate restTemplate, JsonUtil jsonUtil) {
+    public LoginDAO(CustomRestTemplate restTemplate, JsonUtil jsonUtil) {
         this.restTemplate = restTemplate;
         this.jsonUtil = jsonUtil;
     }

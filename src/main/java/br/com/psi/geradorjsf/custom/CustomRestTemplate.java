@@ -6,8 +6,8 @@ import org.springframework.web.client.RestTemplate;
 /**
  * @author Hiago
  */
-public class CustomRestRemplate extends RestTemplate{
-    public CustomRestRemplate(){
+public class CustomRestTemplate extends RestTemplate{
+    public CustomRestTemplate(){
         this.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
     }
 }
