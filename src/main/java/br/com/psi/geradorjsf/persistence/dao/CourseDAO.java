@@ -24,7 +24,6 @@ public class CourseDAO implements Serializable {
     private final String LIST_URL = ApiUtil.BASE_URL + "/professor/course/list";
     private final String DELETE_OR_FIND_ONE_URL = ApiUtil.BASE_URL + "/professor/course/{id}";
     private final String CREATE_UPDATE_URL = ApiUtil.BASE_URL + "/professor/course/";
-    private final CustomRestTemplate restRemplate;
     private final JsonUtil jsonUtil;
     private final ParameterizedTypeReference<List<Course>> courseListTypeReference = new ParameterizedTypeReference<List<Course>>() {
     };
@@ -33,7 +32,6 @@ public class CourseDAO implements Serializable {
     public CourseDAO(CustomRestTemplate restTemplate, JsonUtil jsonUtil) {
         this.restTemplate = restTemplate;
         this.jsonUtil = jsonUtil;
-        this.listCourse = listCourse;
     }
 
     @ExceptionHandler

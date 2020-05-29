@@ -23,7 +23,7 @@ public class QuestionAssignmentDAO implements Serializable{
     private final String LIST_AVAILABLE_QUESTIONS_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/{courseId}/{assignmentId}";
     private final String CREATE_UPDATE_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/";
     private final String DELETE_URL = ApiUtil.BASE_URL + "/professor/course/assignment/questionassignment/{questionAssignmentId}";
-    private final CustomRestTemplate restRemplate;
+    private final CustomRestTemplate restTemplate;
     private final JsonUtil jsonUtil;
     private final ParameterizedTypeReference<List<QuestionAssignment>> questionAssignmentListTypeReference = new ParameterizedTypeReference<List<QuestionAssignment>>() {
     };

@@ -32,7 +32,7 @@ public class LoginBean implements Serializable {
     public String login() throws UnsupportedEncodingException {
         Token token = loginDAO.loginReturningToken(username, password);
         if (token == null ) return null;
-        addTokenAndExpirationTimeToCookies(token.getToken()), token.getExpirationTime().toString());
+        addTokenAndExpirationTimeToCookies(token.getToken(), token.getExpirationTime().toString());
         return token.getAccessType().equals("professor") ? "index.xhtml?faces-redirect=true" : "index-student.xhtml?faces-redirect=true"  ;
     }
 

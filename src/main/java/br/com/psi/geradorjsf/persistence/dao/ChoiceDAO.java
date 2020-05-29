@@ -30,7 +30,6 @@ public class ChoiceDAO implements Serializable {
     public ChoiceDAO(CustomRestTemplate restTemplate, JsonUtil jsonUtil) {
         this.restTemplate = restTemplate;
         this.jsonUtil = jsonUtil;
-        this.choiceList = choiceList;
     }
 
     public List<Choice> list(long questionId) {
