@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpMethod.GET;
+import static  org.springframework.http.HttpMethod.POST;
 
 /**
  * @author Hiago.
@@ -23,6 +24,7 @@ import static org.springframework.http.HttpMethod.GET;
 
 public class ExamDAO implements Serializable {
     private final String LIST_CHOICES_BASED_ON_ACCESS_CODE_URL = ApiUtil.BASE_URL + "/student/exam/choice/{accessCode}/";
+    private final String SAVE_CHOICES_BASED_ON_ACCESS_CODE_URL = ApiUtil.BASE_URL + "/student/exam/{accessCode}/";
     private final CustomRestTemplate restTemplate;
     private final JsonUtil jsonUtil;
     private final ParameterizedTypeReference<List<Choice>> choiceListTypeReference = new ParameterizedTypeReference<List<Choice>>() {
@@ -38,7 +40,11 @@ public class ExamDAO implements Serializable {
     public Map<Question, List<Choice>> list(String accessCode) {
         ResponseEntity<List<Choice>> exchange = restTemplate.exchange(LIST_CHOICES_BASED_ON_ACCESS_CODE_URL, GET, jsonUtil.tokenizedHttpEntityHeader(),
                 choiceListTypeReference, accessCode);
-        Map<Question, List<Choice>> questionChoicesMap = exchange.getBody().stream().collect(Collectors.groupingBy(Choice::getQuestion));
-        return questionChoicesMap;
+        return exchange.getBody().stream().collect(Collectors.groupingBy(Choice::getQuestion));
+    }
+
+    public ResponseEntity<?> save(String accessCode, Map<Long, Long> questionChoiceIdMap){
+        return restTemplate.exchange(SAVE_CHOICES_BASED_ON_ACCESS_CODE_URL, POST, jsonUtil.tokenizedHttpEntityHeader(questionChoiceIdsMap),
+                choiceListTypeReference, accessCode);
     }
 }

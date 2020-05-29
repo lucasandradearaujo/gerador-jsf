@@ -44,6 +44,7 @@ public class ExceptionInterceptor implements Serializable {
                 HttpStatusCodeException httpException = (HttpStatusCodeException) e;
                 Messages.addGlobalError(defineErrorMessage(httpException));
                 redirectToAccessDenied(httpException.getRawStatusCode());
+                e.printStackTrace();
             } else {
                 e.printStackTrace();
             }
